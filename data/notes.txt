@@ -1,0 +1,34 @@
+hello i am steffi
+save this as a note for me
+take a note
+save note
+
+what are in the contents in the note
+poultry farming in indonesia
+
+
+
+'''llm = Gemini(model="models/gemini-pro")
+
+
+# loading data
+csv_file_path = '/workspaces/ChickIn_Chat/data/bigDataHoliday.csv'
+data = pd.read_csv(csv_file_path)
+
+# initialising dataframe agent
+csv_agent = PandasQueryEngine(data,llm = llm,  verbose = True, instruction_str = instruction_str)
+csv_agent.update_prompts({"pandas_prompt": new_prompt})
+
+# creating new list of tools for bot to use
+tools = [
+    note_engine, 
+    QueryEngineTool(
+        query_engine = csv_agent, metadata = ToolMetadata(
+            name = "avg_price_data", 
+            description = "this gives information about the average selling price of the chickens from the different provinces and units from 2019 to 2023 in Indonesia. It has information about the average body weight, supply and demand and whether that day is a holiday or not.  "
+        ),
+    ),
+]
+
+
+agent = ReActAgent.from_tools(tools, llm = llm, verbose = True, context = context)'''
