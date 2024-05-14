@@ -1,0 +1,15 @@
+version control for reference
+
+ChickInChat.py - upload csv file
+Stream.py - model searching based on keywords (limited to only sepcified dictionary)
+Chat.py - error
+
+v2.py - using llama index to generate a query pipeline. 
+    relevant files: prompts.py, query.py
+
+
+
+under src 
+query.py - generating a query pipeline. 
+    flow of pipeline: instruction -> pandas query -> llm -> pandas output -> synthesise the output -> llm
+prompts.py - instruction prompts. 

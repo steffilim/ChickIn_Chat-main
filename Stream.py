@@ -1,9 +1,10 @@
+# base reference
 import os
 import re
 import pandas as pd
 import streamlit as st
 from langchain_core.messages import AIMessage, HumanMessage
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import GoogleGenerativeAI
 from dotenv import load_dotenv
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -19,7 +20,7 @@ csv_file_path = 'data/bigDataHoliday.csv'
 data = pd.read_csv(csv_file_path)
 
 # initialising model
-model = ChatGoogleGenerativeAI(
+model = GoogleGenerativeAI(
         model="gemini-pro", 
         google_api_key=google_api_key,
         temperature=0.5

@@ -1,3 +1,5 @@
+## FOR ReActAgent
+
 import os
 import re
 import pandas as pd
@@ -12,8 +14,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 
 # importing engine libraries
-from prompts import instruction_str, new_prompt, context
-from note_engine import note_engine
+from src.prompts import instruction_str, new_prompt, context
+
 from llama_index.core.agent import ReActAgent
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.experimental.query_engine import PandasQueryEngine
