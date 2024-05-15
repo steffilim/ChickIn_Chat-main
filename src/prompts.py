@@ -63,4 +63,7 @@ response_synthesis_prompt_str = (
     "Response: "
 )
 
+context = """Purpose: The primary role of this agent is to assist users by providing accurate 
+            information about the poultry industry in Indonesia"""
+
 

@@ -13,56 +13,111 @@ from llama_index.core.query_pipeline import (
     Link,
     InputComponent,
 )
+from llama_index.core.tools import QueryEngineTool, ToolMetadata
 
-from src.ResponseWithChatHistory import ResponseWithChatHistory
-from llama_index.postprocessor.colbert_rerank import ColbertRerank
+from src.prompts import context
+from llama_index.experimental.query_engine import PandasQueryEngine
+from llama_index.core.agent import ReActAgent
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+
+from llama_index.embeddings.gemini import GeminiEmbedding
+
 
 ## INITIALISING MODEL AND READING DATA
 load_dotenv()
 google_api_key = os.getenv("GOOGLE_API_KEY") 
+llm = Gemini(api_key=google_api_key, model="models/gemini-pro")
 
-llm = Gemini(model="models/gemini-pro")
-csv_file_path = 'data/bigDataHoliday.csv'
-df = pd.read_csv(csv_file_path)
+# csv data
+csv_file_path = "data/Big Data Holiday.csv"
+csv = pd.read_csv(csv_file_path)
 
-'''## PANDAS AI
-from pandasai import SmartDataframe
-from langchain_google_genai import GoogleGenerativeAI
+# pdf data
+import chromadb
+from llama_index.vector_stores.chroma import ChromaVectorStore
+from llama_index.core import Settings, Document, StorageContext, VectorStoreIndex
 
-langchain_llm = GoogleGenerativeAI(google_api_key=google_api_key,)
-pandasData = SmartDataframe("data/bigDataHoliday.csv", config={"llm": langchain_llm})
-'''
+
+pdf_path = "data/Poultry.pdf"
+pdf = SimpleDirectoryReader(input_files=[pdf_path]).load_data()
+
+gemini_embedding_model = GeminiEmbedding(api_key=google_api_key, model_name="models/embedding-001") # creating embedding
+
+# Create a client and a new collection
+client = chromadb.PersistentClient(path="./chroma_db")
+chroma_collection = client.get_or_create_collection("quickstart")
+
+# Create a vector store
+vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+
+# Create a storage context
+storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
+# Set Global settings
+Settings.llm = llm
+Settings.embed_model = gemini_embedding_model
+
+# Create an index from the documents and save it to the disk.
+index = VectorStoreIndex.from_documents(
+    pdf, storage_context=storage_context
+)
+     
+
+# retriving from chroma
+# Load from disk
+load_client = chromadb.PersistentClient(path="./chroma_db")
+
+# Fetch the collection
+chroma_collection = load_client.get_collection("quickstart")
+
+# Fetch the vector store
+vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+
+# Get the index from the vector store
+pdf_index = VectorStoreIndex.from_vector_store(
+    vector_store
+)
+pdf_engine = pdf_index.as_query_engine()
+
+
+
 
 ## PROMPT TEMPLATES
 pandas_prompt = PromptTemplate(pandas_prompt_str).partial_format(
-    instruction_str=instruction_str, df_str=df.head(5)
+    instruction_str=instruction_str, df_str=csv.head(5)
 )
-pandas_output_parser = PandasInstructionParser(df)
+pandas_output_parser = PandasInstructionParser(csv)
 response_synthesis_prompt = PromptTemplate(response_synthesis_prompt_str)
 
 
-## LLM TO REWRITE USER QUERY
-'''rewrite = (
-    "Rewrite the query to a semantic search engine using the current conversation.\n"
-    "\n"
-    "\n"
-    "{chat_history_str}"
-    "\n"
-    "Latest Message: {query_str}"
-    "Query:"
+## TOOLS
+
+# pandas query engine
+csv_engine = PandasQueryEngine(
+    df = csv, verbose = True, instruction_str = instruction_str
+
 )
 
-rewrite_template = PromptTemplate(rewrite)'''
-
-'''## CHAT HISTORY
-response_component = ResponseWithChatHistory(
-    llm=llm, 
-    system_prompt = (
-        " You are a Chat Bot designed to help the farmers in the poultry industry in Indonesia." 
-        "You will be provided with the previous chat history, and answer the user's query "
-        "as well as possibly relevant context."
+# agent tool
+tools = [
+    QueryEngineTool(
+        query_engine = csv_engine, 
+        metadata = ToolMetadata(
+            name = "bigData",
+            description = " this gives information of the sales price and average body weight of the chickens across different areas and units from 2019 to 2023."
+        )
+    ), 
+    QueryEngineTool(
+        query_engine = pdf_engine, 
+        metadata = ToolMetadata(
+            name = "pdf file",
+            description = "this gives detailed information about the poultry industry."
+        )
     )
-)'''
+        
+]
+
+agent = ReActAgent.from_tools(tools, llm = llm, verbose = True, context = context)
 
 
 
@@ -73,7 +128,7 @@ qp = QueryPipeline(
         "input": InputComponent(),
         "pandas_prompt": pandas_prompt,
         "llm1": llm,
-        "pandas_output_parser": pandas_output_parser,
+        "pandas_output_parser": agent,
         "response_synthesis_prompt": response_synthesis_prompt,
         "llm2": llm,
     },
@@ -91,7 +146,7 @@ qp.add_links(
             "pandas_output_parser",
             "response_synthesis_prompt",
             dest_key="pandas_output",
-        ),
+        )
     ]
 )
 # add link from response synthesis prompt to llm2

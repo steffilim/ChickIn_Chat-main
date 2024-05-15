@@ -9,11 +9,6 @@ from llama_index.core.memory import ChatMemoryBuffer
 # query library
 from src.query import qp
 
-# functions
-
-
-
-
 # setting up streamlit UI
 st.set_page_config(page_title="v2", page_icon="🐔")
 st.title("v2")
@@ -23,6 +18,9 @@ pipeline_memory = ChatMemoryBuffer.from_defaults(token_limit=8000)
 
 # Streamlit app layout
 def main():
+    # initialising memory
+    chat_history = pipeline_memory.get()
+    chat_history_str = "\n".join(str(x) for x in chat_history)
     if "messages" not in st.session_state.keys(): # Initialize the chat message history
         st.session_state.messages = [
             {"role": "assistant", "content": "Hello! Welcome to ChickIn Chat. How can I help you today?"}
