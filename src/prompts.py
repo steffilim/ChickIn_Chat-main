@@ -53,8 +53,9 @@ response_synthesis_prompt_str = (
     "You are to assist them by answering their questions related to the chicken farming industry."
 
     "From {pandas_instructions}, if the query is not related to the dataset, provide a response that answers the user's query\n\n"
-    "Else, given the user's query, refine the response from the query results.\n"
 
+    "Else, given the user's question, refine the response and phrase it in such a simple way that farmers would be able to understand. \n"
+    "Please keep in mind that the farmers might not have high level education and might not understand complex terms. \n"
     "Query: {query_str}\n\n"
     "Pandas Instructions (optional):\n{pandas_instructions}\n\n"
     "Pandas Output: {pandas_output}\n\n"
