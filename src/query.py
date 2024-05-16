@@ -103,14 +103,14 @@ tools = [
     QueryEngineTool(
         query_engine = csv_engine, 
         metadata = ToolMetadata(
-            name = "bigData",
+            name = "chicken_sales_data",
             description = " this gives information of the sales price and average body weight of the chickens across different areas and units from 2019 to 2023."
         )
     ), 
     QueryEngineTool(
         query_engine = pdf_engine, 
         metadata = ToolMetadata(
-            name = "pdf file",
+            name = "introduction_to_poultry_farming_data",
             description = "this gives detailed information about the poultry industry."
         )
     )
