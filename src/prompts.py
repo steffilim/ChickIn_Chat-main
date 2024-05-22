@@ -5,11 +5,11 @@ pandas_prompt_str = (
     "The name of the dataframe is `df`.\n"
     "This is the result of `print(df.head())`:\n"
     "{df_str}\n\n"
-    "Take note of these columns: `PROVINCE`, `UNIT`, `YEAR`, `MONTH`. \n"
-    "For the `PROVINCE` column, the values are the names of the provinces or regions in Indonesia.\n"
-    "For the `UNIT` column, the values are the districts that are found in the regions.\n"
-    "In the `YEAR` column, the values represent years ranging from 2019 to 2023. However, only the last two digits of each year are shown. For example, a value of 19 in the `YEAR` column corresponds to the year 2019."
-    "In the `MONTH` column, the values represent the months of the year. For example, a value of 1 in the `MONTH` column corresponds to the month January\n\n"
+    "Take note of these columns: `Province`, `Unit`, `Year`, `Month`. \n"
+    "For the `Province` column, the values are the names of the provinces or regions in Indonesia.\n"
+    "For the `Unit` column, the values are the districts that are found in the regions.\n"
+    "In the `Year` column, the values represent years ranging from 2019 to 2023. However, only the last two digits of each year are shown. For example, a value of 19 in the `Year` column corresponds to the year 2019."
+    "In the `Month` column, the values represent the months of the year. For example, a value of 1 in the `Month` column corresponds to the month January\n\n"
 
 
     # explain the query
@@ -55,6 +55,9 @@ response_synthesis_prompt_str = (
     "From {pandas_instructions}, if the query is not related to the dataset, provide a response that answers the user's query\n\n"
 
     "Else, given the user's question, refine the response and phrase it in such a simple way that farmers would be able to understand. \n"
+    "For example, if the user asks for the average weight of chickens in a specific province, you could respond with: 'The average weight of chickens in `province` is `average_weight` kg.'\n\n"
+    "For example, if the user asks for the selling price of chickens in each month, list the selling price for each month in a clean, clear and simple format. Round the value to 2 decimal points\n\n"
+
     "Please keep in mind that the farmers might not have high level education and might not understand complex terms. \n"
     "Query: {query_str}\n\n"
     "Pandas Instructions (optional):\n{pandas_instructions}\n\n"

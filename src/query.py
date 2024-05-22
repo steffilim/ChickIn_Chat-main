@@ -18,6 +18,7 @@ from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from src.prompts import context
 from llama_index.experimental.query_engine import PandasQueryEngine
 from llama_index.core.agent import ReActAgent
+
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 
 from llama_index.embeddings.gemini import GeminiEmbedding
@@ -30,63 +31,14 @@ llm = Gemini(api_key=google_api_key, model="models/gemini-pro")
 
 # csv data
 csv_file_path = "data/Big Data Holiday.csv"
-csv = pd.read_csv(csv_file_path)
-
-# pdf data
-import chromadb
-from llama_index.vector_stores.chroma import ChromaVectorStore
-from llama_index.core import Settings, Document, StorageContext, VectorStoreIndex
-
-
-pdf_path = "data/Poultry.pdf"
-pdf = SimpleDirectoryReader(input_files=[pdf_path]).load_data()
-
-gemini_embedding_model = GeminiEmbedding(api_key=google_api_key, model_name="models/embedding-001") # creating embedding
-
-# Create a client and a new collection
-client = chromadb.PersistentClient(path="./chroma_db")
-chroma_collection = client.get_or_create_collection("quickstart")
-
-# Create a vector store
-vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
-
-# Create a storage context
-storage_context = StorageContext.from_defaults(vector_store=vector_store)
-
-# Set Global settings
-Settings.llm = llm
-Settings.embed_model = gemini_embedding_model
-
-# Create an index from the documents and save it to the disk.
-index = VectorStoreIndex.from_documents(
-    pdf, storage_context=storage_context
-)
-     
-
-# retriving from chroma
-# Load from disk
-load_client = chromadb.PersistentClient(path="./chroma_db")
-
-# Fetch the collection
-chroma_collection = load_client.get_collection("quickstart")
-
-# Fetch the vector store
-vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
-
-# Get the index from the vector store
-pdf_index = VectorStoreIndex.from_vector_store(
-    vector_store
-)
-pdf_engine = pdf_index.as_query_engine()
-
-
+df = pd.read_csv(csv_file_path)
 
 
 ## PROMPT TEMPLATES
 pandas_prompt = PromptTemplate(pandas_prompt_str).partial_format(
-    instruction_str=instruction_str, df_str=csv.head(5)
+    instruction_str=instruction_str, df_str=df.head(5)
 )
-pandas_output_parser = PandasInstructionParser(csv)
+pandas_output_parser = PandasInstructionParser(df)
 response_synthesis_prompt = PromptTemplate(response_synthesis_prompt_str)
 
 
@@ -94,7 +46,7 @@ response_synthesis_prompt = PromptTemplate(response_synthesis_prompt_str)
 
 # pandas query engine
 csv_engine = PandasQueryEngine(
-    df = csv, verbose = True, instruction_str = instruction_str
+    df = df, verbose = True, instruction_str = instruction_str
 
 )
 
@@ -103,17 +55,11 @@ tools = [
     QueryEngineTool(
         query_engine = csv_engine, 
         metadata = ToolMetadata(
-            name = "chicken_sales_data",
+            name = "bigData",
             description = " this gives information of the sales price and average body weight of the chickens across different areas and units from 2019 to 2023."
         )
     ), 
-    QueryEngineTool(
-        query_engine = pdf_engine, 
-        metadata = ToolMetadata(
-            name = "introduction_to_poultry_farming_data",
-            description = "this gives detailed information about the poultry industry."
-        )
-    )
+    
         
 ]
 
@@ -128,7 +74,7 @@ qp = QueryPipeline(
         "input": InputComponent(),
         "pandas_prompt": pandas_prompt,
         "llm1": llm,
-        "pandas_output_parser": agent,
+        "pandas_output_parser": pandas_output_parser,
         "response_synthesis_prompt": response_synthesis_prompt,
         "llm2": llm,
     },

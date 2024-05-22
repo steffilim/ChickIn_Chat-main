@@ -19,8 +19,8 @@ pipeline_memory = ChatMemoryBuffer.from_defaults(token_limit=8000)
 # Streamlit app layout
 def main():
     # initialising memory
-    chat_history = pipeline_memory.get()
-    chat_history_str = "\n".join(str(x) for x in chat_history)
+    # chat_history = pipeline_memory.get()
+    # chat_history_str = "\n".join(str(x) for x in chat_history)
     if "messages" not in st.session_state.keys(): # Initialize the chat message history
         st.session_state.messages = [
             {"role": "assistant", "content": "Hello! Welcome to ChickIn Chat. How can I help you today?"}
