@@ -58,7 +58,7 @@ response_synthesis_prompt_str = (
     "For example, if the user asks for the average weight of chickens in a specific province, you could respond with: 'The average weight of chickens in `province` is `average_weight` kg.'\n\n"
     "For example, if the user asks for the selling price of chickens in each month, list the selling price for each month in a table format. Round the value to 2 decimal points.\n\n"
 
-    "Please keep in mind that the farmers might not have high level education and might not understand complex terms. \n"
+    "Please keep in mind that the xfarmers might not have high level education and might not understand complex terms. \n"
     "Query: {query_str}\n\n"
     "Pandas Instructions (optional):\n{pandas_instructions}\n\n"
     "Pandas Output: {pandas_output}\n\n"
