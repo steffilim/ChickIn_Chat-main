@@ -1,7 +1,7 @@
 pandas==1.4.2
 streamlit==1.8.1
 llama-index
-streamlit
+streamlit==1.33.0
 openai
 llama-index-llms-gemini
 python-dotenv
