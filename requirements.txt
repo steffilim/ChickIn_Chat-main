@@ -6,4 +6,4 @@ openai
 llama-index-llms-gemini
 python-dotenv
 llama-index-experimental
-llama-index-google-generativeai
+llama-index google-generativeai
