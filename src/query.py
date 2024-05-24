@@ -13,11 +13,11 @@ from llama_index.core.query_pipeline import (
     Link,
     InputComponent,
 )
-from llama_index.core.tools import QueryEngineTool, ToolMetadata
+
 
 from src.prompts import context
-from llama_index.core.agent import ReActAgent
-import google.generativeai as genai 
+
+
 
 
 
@@ -25,12 +25,7 @@ import google.generativeai as genai
 ## INITIALISING MODEL AND READING DATA
 load_dotenv()
 google_api_key = os.getenv("GOOGLE_API_KEY") 
-genai.configure(api_key=google_api_key)
-config = {
-    "temperature": 0.8,
-    "max_output_tokens": 2048,
-}
-    
+
 #llm = genai.GenerativeModel("gemini-pro", generation_config=config)
 llm = Gemini(api_key=google_api_key, model="models/gemini-pro")
 

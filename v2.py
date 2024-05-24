@@ -10,7 +10,7 @@ from src.query import qp
 
 # setting up streamlit UI
 st.set_page_config(page_title="v2", page_icon="🐔")
-st.title("v2")
+st.title("ChickIn Chat CSV")
 
 
 # Streamlit app layout
