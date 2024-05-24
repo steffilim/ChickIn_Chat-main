@@ -6,5 +6,5 @@ openai
 llama-index
 llama-index-llms-gemini
 llama-index
-dotenv
+python-dotenv
 llama-index-experimental
