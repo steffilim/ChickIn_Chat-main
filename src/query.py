@@ -45,10 +45,7 @@ response_synthesis_prompt = PromptTemplate(response_synthesis_prompt_str)
 ## TOOLS
 
 # pandas query engine
-csv_engine = PandasQueryEngine(
-    df = df, verbose = True, instruction_str = instruction_str
-
-)
+csv_engine = PandasInstructionParser(df)
 
 # agent tool
 tools = [
