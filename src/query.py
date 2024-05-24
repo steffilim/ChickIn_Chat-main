@@ -24,7 +24,7 @@ load_dotenv()
 google_api_key = os.getenv("GOOGLE_API_KEY") 
 
 #llm = genai.GenerativeModel("gemini-pro", generation_config=config)
-llm = Gemini(api_key=google_api_key, model = "models/gemini-1.5-pro-latest")
+llm = Gemini(api_key=google_api_key, model = "models/gemini-1.5-pro")
 
 # csv data
 csv_file_path = "data/Big Data Holiday.csv"
