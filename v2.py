@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import pandas as pd
 from llama_index.llms.gemini import Gemini
 
-from llama_index.core.memory import ChatMemoryBuffer
 
 # query library
 from src.query import qp
@@ -13,8 +12,6 @@ from src.query import qp
 st.set_page_config(page_title="v2", page_icon="🐔")
 st.title("v2")
 
-# getting memory
-pipeline_memory = ChatMemoryBuffer.from_defaults(token_limit=8000)
 
 # Streamlit app layout
 def main():

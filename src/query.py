@@ -16,12 +16,9 @@ from llama_index.core.query_pipeline import (
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 
 from src.prompts import context
-from llama_index.experimental.query_engine import PandasQueryEngine
 from llama_index.core.agent import ReActAgent
 
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 
-from llama_index.embeddings.gemini import GeminiEmbedding
 
 
 ## INITIALISING MODEL AND READING DATA
