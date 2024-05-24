@@ -17,28 +17,22 @@ from llama_index.core.tools import QueryEngineTool, ToolMetadata
 
 from src.prompts import context
 from llama_index.core.agent import ReActAgent
+import google.generativeai as genai 
 
 
-# GLOBAL VARIABLE FOR API KEY
-api_key_global = None
 
-def set_api_key(key):
-    global api_key_global
-    api_key_global = key
 
 ## INITIALISING MODEL AND READING DATA
 load_dotenv()
-
-def initialize_model():
-    llm = Gemini(api_key=api_key_global, model="models/gemini-pro")
-    return llm
-
-# csv data
-csv_file_path = "data/Big Data Holiday.csv"
-df = pd.read_csv(csv_file_path)
-
-# Initialize model
-llm = initialize_model()
+google_api_key = os.getenv("GOOGLE_API_KEY") 
+genai.configure(api_key=google_api_key)
+config = {
+    "temperature": 0.8,
+    "max_output_tokens": 2048,
+}
+    
+#llm = genai.GenerativeModel("gemini-pro", generation_config=config)
+llm = Gemini(api_key=google_api_key, model="models/gemini-pro")
 
 # csv data
 csv_file_path = "data/Big Data Holiday.csv"
@@ -58,20 +52,6 @@ response_synthesis_prompt = PromptTemplate(response_synthesis_prompt_str)
 # pandas query engine
 csv_engine = PandasInstructionParser(df)
 
-# agent tool
-tools = [
-    QueryEngineTool(
-        query_engine = csv_engine, 
-        metadata = ToolMetadata(
-            name = "bigData",
-            description = " this gives information of the sales price and average body weight of the chickens across different areas and units from 2019 to 2023."
-        )
-    ), 
-    
-        
-]
-
-agent = ReActAgent.from_tools(tools, llm = llm, verbose = True, context = context)
 
 
 

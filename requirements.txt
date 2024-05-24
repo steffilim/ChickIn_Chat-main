@@ -3,8 +3,7 @@ streamlit==1.8.1
 llama-index
 streamlit
 openai
-llama-index
 llama-index-llms-gemini
-llama-index
 python-dotenv
 llama-index-experimental
+llama-index-google-generativeai

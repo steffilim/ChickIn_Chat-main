@@ -6,7 +6,7 @@ from llama_index.llms.gemini import Gemini
 
 
 # query library
-from src.query import qp, set_api_key
+from src.query import qp
 
 # setting up streamlit UI
 st.set_page_config(page_title="v2", page_icon="🐔")
@@ -15,18 +15,6 @@ st.title("v2")
 
 # Streamlit app layout
 def main():
-    # initialising memory
-    # chat_history = pipeline_memory.get()
-    # chat_history_str = "\n".join(str(x) for x in chat_history)
-
-    # Sidebar for API key input
-    st.sidebar.title("API Configuration")
-    api_key = st.sidebar.text_input("Enter your API key:", value="")
-    st.sidebar.write("Enter your API key and hit enter to initialize the chat.")
-
-    # Set API key in the query module
-    if api_key:
-        set_api_key(api_key)
 
     if "messages" not in st.session_state.keys(): # Initialize the chat message history
         st.session_state.messages = [
