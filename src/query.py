@@ -19,12 +19,26 @@ from src.prompts import context
 from llama_index.core.agent import ReActAgent
 
 
+# GLOBAL VARIABLE FOR API KEY
+api_key_global = None
 
+def set_api_key(key):
+    global api_key_global
+    api_key_global = key
 
 ## INITIALISING MODEL AND READING DATA
 load_dotenv()
-google_api_key = os.getenv("GOOGLE_API_KEY") 
-llm = Gemini(api_key=google_api_key, model="models/gemini-pro")
+
+def initialize_model():
+    llm = Gemini(api_key=api_key_global, model="models/gemini-pro")
+    return llm
+
+# csv data
+csv_file_path = "data/Big Data Holiday.csv"
+df = pd.read_csv(csv_file_path)
+
+# Initialize model
+llm = initialize_model()
 
 # csv data
 csv_file_path = "data/Big Data Holiday.csv"
