@@ -56,7 +56,7 @@ response_synthesis_prompt_str = (
 
     "Else, given the user's question, refine the response and phrase it in such a simple way that farmers would be able to understand. \n"
     "For example, if the user asks for the average weight of chickens in a specific province, you could respond with: 'The average weight of chickens in `province` is `average_weight` kg.'\n\n"
-    "For example, if the user asks for the selling price of chickens in each month, list the selling price for each month in a clean, clear and simple format. Round the value to 2 decimal points\n\n"
+    "For example, if the user asks for the selling price of chickens in each month, list the selling price for each month in a table format. Round the value to 2 decimal points.\n\n"
 
     "Please keep in mind that the farmers might not have high level education and might not understand complex terms. \n"
     "Query: {query_str}\n\n"
