@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 
 # query library
-from src.query import qp
+from src.query import main_chain
 
 # setting up streamlit UI
 st.set_page_config(page_title="v2", page_icon="🐔")
@@ -37,8 +37,8 @@ def main():
             with st.spinner("Processing"):
                 query_str = str(query)
                 print(query_str)
-                response = qp.run(query_str = query_str)
-                st.write(response.message.content)
+                response = main_chain.run(query_str)
+                st.write(response)
                 message = {"role": "assistant", "content": response}
                 st.session_state.messages.append(message) # Add response to message history
 
